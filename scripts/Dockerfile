@@ -8,8 +8,10 @@ WORKDIR /
 RUN set -xe && \
     apk add --no-cache --virtual .build-tools git g++ build-base linux-headers cmake python3 && \
     apk add --no-cache --virtual .build-deps curl-dev rapidjson-dev pcre2-dev yaml-cpp-dev && \
-    git clone https://github.com/ftk/quickjspp --depth=1 && \
+    git clone --no-checkout https://github.com/ftk/quickjspp.git && \
     cd quickjspp && \
+    git fetch origin 0c00c48895919fc02da3f191a2da06addeb07f09 && \
+    git checkout 0c00c48895919fc02da3f191a2da06addeb07f09 && \
     git submodule update --init && \
     cmake -DCMAKE_BUILD_TYPE=Release . && \
     make quickjs -j $THREADS && \
@@ -35,7 +37,7 @@ RUN set -xe && \
     cmake -DCMAKE_CXX_STANDARD=11 . && \
     make install -j $THREADS && \
     cd .. && \
-    git clone https://github.com/tindy2013/subconverter --depth=1 && \
+    git clone https://github.com/asdlokj1qpi233/subconverter --depth=1 && \
     cd subconverter && \
     [ -n "$SHA" ] && sed -i 's/\(v[0-9]\.[0-9]\.[0-9]\)/\1-'"$SHA"'/' src/version.h;\
     python3 -m ensurepip && \
